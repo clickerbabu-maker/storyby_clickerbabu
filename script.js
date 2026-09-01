@@ -842,20 +842,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
 
+    // Helper: Sanitize input strings against potential HTML tags / control characters
+    function sanitizeInput(str) {
+        if (!str) return '';
+        return str.replace(/[<>]/g, '').trim();
+    }
+
     if (bookingForm) {
         bookingForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const name = document.getElementById('clientName').value.trim();
-            const email = document.getElementById('clientEmail').value.trim();
-            const phone = document.getElementById('clientPhone').value.trim();
-            const date = document.getElementById('weddingDates').value;
-            const service = document.getElementById('serviceType').value;
-            const venue = document.getElementById('weddingVenue').value.trim() || 'To be finalized';
-            const notes = document.getElementById('clientNotes').value.trim() || 'Looking forward to crafting our story!';
+            // Anti-Spam Honeypot Check: Headless bots populate hidden fields
+            const hpTrap = document.getElementById('hpConfirmField');
+            if (hpTrap && hpTrap.value) {
+                console.warn('Spam bot trap triggered. Silently dropping inquiry.');
+                showLuxuryToast('Inquiry Submitted', 'Thank you! Your inquiry has been logged.', true);
+                bookingForm.reset();
+                return;
+            }
 
-            if (!name || !phone) {
-                showLuxuryToast('Required Fields', 'Please provide your names and phone number.', false);
+            const name = sanitizeInput(document.getElementById('clientName')?.value || '');
+            const email = sanitizeInput(document.getElementById('clientEmail')?.value || '');
+            const phone = sanitizeInput(document.getElementById('clientPhone')?.value || '');
+            const date = document.getElementById('weddingDates')?.value || '';
+            const service = sanitizeInput(document.getElementById('serviceType')?.value || 'Royal Destination Wedding');
+            const venue = sanitizeInput(document.getElementById('weddingVenue')?.value || '') || 'To be finalized';
+            const notes = sanitizeInput(document.getElementById('clientNotes')?.value || '') || 'Looking forward to crafting our story!';
+
+            if (!name || name.length < 2) {
+                showLuxuryToast('Name Required', 'Please provide your full names.', false);
+                document.getElementById('clientName')?.focus();
+                return;
+            }
+
+            // Phone Validation: Accepts +91, dashes, spaces, 7 to 16 digits
+            const phoneRegex = /^[+0-9\s-]{7,16}$/;
+            if (!phone || !phoneRegex.test(phone)) {
+                showLuxuryToast('Valid Phone Required', 'Please enter a valid phone number (7–16 digits).', false);
+                document.getElementById('clientPhone')?.focus();
                 return;
             }
 
