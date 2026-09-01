@@ -5,17 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Story by Clicker Babu | Luxury Indian Wedding Photographers & Filmmakers</title>
     <meta name="description" content="Award-winning luxury wedding photography and couture cinematography based in Raipur, Chhattisgarh. Specializing in royal weddings, candid emotions, and pre-wedding stories worldwide.">
-    
+    <link rel="canonical" href="https://business-online.in/">
+
+    <!-- Strict Security & Privacy Directives -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; media-src 'self' blob:; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests;">
+
     <!-- OpenGraph & WhatsApp Social Share Preview Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Story by Clicker Babu | Luxury Wedding Photography & Cinema">
     <meta property="og:description" content="Preserving raw emotion, timeless grace, and royal splendor across India and beyond. Commission your wedding dates.">
-    <meta property="og:image" content="assets/images/portfolio/hero_monochrome_symphony.webp">
-    <meta property="og:url" content="http://localhost:8000/">
+    <meta property="og:image" content="https://business-online.in/assets/images/portfolio/hero_monochrome_symphony.webp">
+    <meta property="og:url" content="https://business-online.in/">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Story by Clicker Babu | Luxury Wedding Photography">
     <meta name="twitter:description" content="Award-winning luxury wedding photography and couture cinematography based in Raipur, India.">
-    <meta name="twitter:image" content="assets/images/portfolio/hero_monochrome_symphony.webp">
+    <meta name="twitter:image" content="https://business-online.in/assets/images/portfolio/hero_monochrome_symphony.webp">
 
     <!-- Google LocalBusiness / ProfessionalService JSON-LD Schema -->
     <script type="application/ld+json">
@@ -606,20 +613,26 @@
                 </div>
 
                 <div class="contact-form-side">
-                    <form class="editorial-form" id="bookingForm">
+                    <form class="editorial-form" id="bookingForm" autocomplete="on">
+                        <!-- Anti-Spam Invisible Bot Trap Field -->
+                        <div class="hp-trap" aria-hidden="true">
+                            <label for="hpConfirmField">Leave this field blank</label>
+                            <input type="text" name="hp_confirm_field" id="hpConfirmField" tabindex="-1" autocomplete="off">
+                        </div>
+
                         <div class="form-field">
                             <label for="clientName">Your Names</label>
-                            <input type="text" id="clientName" placeholder="e.g. Priya & Rohan" required>
+                            <input type="text" id="clientName" placeholder="e.g. Priya & Rohan" maxlength="80" required>
                         </div>
 
                         <div class="form-row-2">
                             <div class="form-field">
                                 <label for="clientEmail">Email Address</label>
-                                <input type="email" id="clientEmail" placeholder="yourname@gmail.com" required>
+                                <input type="email" id="clientEmail" placeholder="yourname@gmail.com" maxlength="80" required>
                             </div>
                             <div class="form-field">
                                 <label for="clientPhone">Phone Number</label>
-                                <input type="tel" id="clientPhone" placeholder="+91 98765 43210" required>
+                                <input type="tel" id="clientPhone" placeholder="+91 98765 43210" pattern="^[+0-9\s-]{7,16}$" maxlength="16" title="Please enter a valid phone number (7-16 digits)" required>
                             </div>
                         </div>
 
@@ -641,12 +654,12 @@
 
                         <div class="form-field">
                             <label for="weddingVenue">Wedding City & Venue</label>
-                            <input type="text" id="weddingVenue" placeholder="e.g. Udaipur Palace / Grand Hyatt Raipur">
+                            <input type="text" id="weddingVenue" placeholder="e.g. Udaipur Palace / Grand Hyatt Raipur" maxlength="120">
                         </div>
 
                         <div class="form-field">
                             <label for="clientNotes">Tell Us About Your Vision</label>
-                            <textarea id="clientNotes" rows="4" placeholder="Share your love story, venues, and what matters most to you..."></textarea>
+                            <textarea id="clientNotes" rows="4" placeholder="Share your love story, venues, and what matters most to you..." maxlength="500"></textarea>
                         </div>
 
                         <button type="submit" class="btn-editorial-submit" id="submitBtn">Submit Booking Inquiry</button>
@@ -824,8 +837,8 @@
         </div>
     </div>
 
-    <!-- Silk Smooth Momentum Scroll Engine (Lenis) -->
-    <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
-    <script src="script.js?v=10x_gyro_v6"></script>
+    <!-- Silk Smooth Momentum Scroll Engine (Self-Hosted Local Asset) -->
+    <script src="assets/js/lenis.min.js"></script>
+    <script src="script.js?v=10x_security_v8"></script>
 </body>
 </html>
