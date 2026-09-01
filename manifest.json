@@ -1,0 +1,22 @@
+{
+  "name": "Story by Clicker Babu | Luxury Wedding Photography",
+  "short_name": "Clicker Babu",
+  "description": "Award-winning luxury wedding photography and couture cinematography based in Raipur, Chhattisgarh.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF7F2",
+  "theme_color": "#141210",
+  "scope": "/",
+  "lang": "en-IN",
+  "categories": ["lifestyle", "photography", "business"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
