@@ -906,4 +906,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --------------------------------------------------------------------------
+    // 13. PWA SERVICE WORKER REGISTRATION (OFFLINE CACHING)
+    // --------------------------------------------------------------------------
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').then((reg) => {
+                console.log('Story by Clicker Babu PWA Service Worker registered:', reg.scope);
+            }).catch((err) => {
+                console.warn('PWA Service Worker registration deferred:', err);
+            });
+        });
+    }
+
 });
