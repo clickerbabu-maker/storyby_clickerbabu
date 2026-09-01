@@ -2145,3 +2145,15 @@ a {
         display: none !important;
     }
 }
+
+/* Security: Invisible Anti-Spam Bot Trap */
+.hp-trap {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
