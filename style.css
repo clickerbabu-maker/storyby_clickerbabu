@@ -87,6 +87,7 @@ img {
     display: block;
     height: auto;
     -webkit-user-drag: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -239,6 +240,7 @@ a {
 .site-header.scrolled {
     padding: 1.1rem 0;
     background: rgba(250, 247, 242, 0.94);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-hairline);
@@ -537,6 +539,7 @@ a {
     padding: 0.45rem 1.4rem;
     border: 1px solid rgba(255, 255, 255, 0.25);
     background: rgba(13, 13, 15, 0.4);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 50px;
     font-size: 0.72rem;
@@ -694,6 +697,7 @@ a {
     transform: translateX(-50%);
     padding: 0.4rem 1.2rem;
     background: rgba(250, 247, 242, 0.9);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border-hairline);
     font-size: 0.68rem;
@@ -1154,6 +1158,7 @@ a {
     overflow: hidden;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
     background: #1C1C1E;
+    -webkit-user-select: none;
     user-select: none;
     touch-action: none;
     cursor: ew-resize;
@@ -1173,6 +1178,7 @@ a {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    -webkit-clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
     clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
     will-change: clip-path;
 }
@@ -1194,6 +1200,7 @@ a {
     text-transform: uppercase;
     border-radius: 50px;
     pointer-events: none;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     z-index: 5;
 }
@@ -1441,9 +1448,11 @@ a {
 }
 
 .editorial-form select {
+    -webkit-appearance: none;
     appearance: none;
     -webkit-appearance: none;
-    -moz-appearance: none;
+    -moz--webkit-appearance: none;
+    appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238F7238' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1.2rem center;
@@ -1831,6 +1840,7 @@ a {
     width: 100%;
     height: 100%;
     background: rgba(13, 13, 15, 0.95);
+    -webkit-backdrop-filter: blur(25px);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     z-index: 2500;
@@ -1910,6 +1920,7 @@ a {
     width: 100%;
     height: 100%;
     background: rgba(13, 13, 15, 0.94);
+    -webkit-backdrop-filter: blur(25px);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     z-index: 2000;
@@ -1945,6 +1956,7 @@ a {
     flex-direction: column;
     align-items: center;
     position: relative;
+    -webkit-user-select: none;
     user-select: none;
 }
 
