@@ -1,0 +1,19 @@
+# ==============================================================================
+# STORY BY CLICKER BABU - CRAWLER & ROBOTS DIRECTIVES
+# Target: https://business-online.in/
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Disallow: /scratch/
+Disallow: /admin/
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap Location
+Sitemap: https://business-online.in/sitemap.xml
