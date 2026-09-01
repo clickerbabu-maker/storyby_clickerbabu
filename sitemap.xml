@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <url>
+        <loc>https://business-online.in/</loc>
+        <lastmod>2026-09-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://business-online.in/assets/images/portfolio/hero_monochrome_symphony.webp</image:loc>
+            <image:title>Story by Clicker Babu - Luxury Wedding Photography</image:title>
+            <image:caption>Award-winning candid wedding photography and couture cinematography based in Raipur, Chhattisgarh.</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://business-online.in/assets/images/portfolio/haldi_splash_explosion.webp</image:loc>
+            <image:title>The Golden Cascade - Haldi Snan Water Splash Ritual</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://business-online.in/assets/images/portfolio/bridal_gilded_veil.webp</image:loc>
+            <image:title>The Gilded Veil - Sabyasachi Tier Macro Bridal Portrait</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://business-online.in/assets/images/portfolio/bridal_emerald_peacock.webp</image:loc>
+            <image:title>The Emerald Radha - Concept Royal Bridal Heirloom</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://business-online.in/assets/images/clicker_babu_editorial_bw.webp</image:loc>
+            <image:title>Clicker Babu - Lead Visual Storyteller</image:title>
+        </image:image>
+    </url>
+</urlset>
