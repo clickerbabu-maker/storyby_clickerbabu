@@ -1,0 +1,79 @@
+{
+  "tenantId": "t_ss_002",
+  "username": "sharmasweets",
+  "customDomain": null,
+  "businessName": "Sharma Sweets & Artisan Bakery",
+  "tagline": "Pure Desi Ghee Confectionery & Gourmet Delights",
+  "about": "Serving authentic Indian sweets, pure desi ghee delicacies, premium dry fruits, and bespoke festive hampers since 1984. Trusted by 50,000+ families across Raipur and Central India.",
+  "category": "restaurant",
+  "location": {
+    "city": "Raipur",
+    "state": "Chhattisgarh",
+    "address": "Pandri Main Road, Raipur",
+    "pincode": "492004",
+    "geo": {
+      "lat": 21.2480,
+      "lng": 81.6500
+    }
+  },
+  "contact": {
+    "phone": "+919893012345",
+    "whatsapp": "919893012345",
+    "email": "orders@sharmasweets.in",
+    "instagram": "sharmasweetsraipur",
+    "youtube": ""
+  },
+  "theme": {
+    "preset": "warm_terracotta",
+    "primaryColor": "#C05621",
+    "accentColor": "#DD6B20",
+    "fontHeading": "Playfair Display",
+    "fontBody": "Plus Jakarta Sans",
+    "heroStyle": "split_editorial"
+  },
+  "branding": {
+    "logoUrl": "",
+    "faviconUrl": "",
+    "heroCoverUrl": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=1200&auto=format&fit=crop&q=80",
+    "badges": ["100% Pure Desi Ghee", "FSSAI Certified", "Since 1984"]
+  },
+  "catalog": [
+    {
+      "id": "sw_01",
+      "title": "Royal Kaju Katli (Silver Foil)",
+      "description": "Handcrafted with premium Goan cashews and pure saffron aroma.",
+      "price": "₹950 / kg",
+      "imageUrl": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop&q=80",
+      "featured": true
+    },
+    {
+      "id": "sw_02",
+      "title": "Pure Desi Ghee Motichoor Ladoo",
+      "description": "Authentic melt-in-mouth pearls soaked in rich desi ghee and pistachios.",
+      "price": "₹680 / kg",
+      "imageUrl": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=600&auto=format&fit=crop&q=80",
+      "featured": true
+    },
+    {
+      "id": "sw_03",
+      "title": "Luxury Wedding & Corporate Gift Hampers",
+      "description": "Customized royal tin packaging with assorted dry fruits, baklava, and premium sweets.",
+      "price": "Starting ₹1,200",
+      "imageUrl": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80",
+      "featured": true
+    }
+  ],
+  "testimonials": [
+    {
+      "clientName": "Rajesh Agrawal",
+      "location": "Raipur",
+      "review": "Sharma Sweets has been our family's first choice for all weddings and Diwali gifts for over 20 years. Quality is unbeatable!",
+      "rating": 5
+    }
+  ],
+  "seo": {
+    "metaTitle": "Sharma Sweets Raipur | Pure Desi Ghee Sweets & Gourmet Bakery",
+    "metaDescription": "Order pure desi ghee sweets, royal kaju katli, and luxury gift hampers online from Sharma Sweets Raipur. Official store on business-online.in.",
+    "keywords": ["Sharma Sweets Raipur", "Best Sweets Raipur", "Order Sweets Online", "business-online.in"]
+  }
+}
