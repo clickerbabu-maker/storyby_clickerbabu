@@ -1,13 +1,14 @@
 /**
  * business-online.in — Merchant Auth Stylesheet
  * Luxury Glassmorphic Obsidian & Champagne Gold Theme
+ * Includes Google OAuth, Remember Me & Mandatory Mobile Binding Modal
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
 
 :root {
   --auth-bg: #070709;
-  --auth-card-bg: rgba(18, 17, 20, 0.75);
+  --auth-card-bg: rgba(18, 17, 20, 0.85);
   --auth-border: rgba(212, 175, 55, 0.2);
   --auth-border-glow: rgba(212, 175, 55, 0.4);
   --auth-gold: #D4AF37;
@@ -59,7 +60,7 @@ body.auth-page {
   max-width: 460px;
   position: relative;
   z-index: 2;
-  animation: authFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: authFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes authFadeUp {
@@ -111,11 +112,11 @@ body.auth-page {
 
 .auth-card {
   background: var(--auth-card-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--auth-border);
   border-radius: 20px;
-  padding: 40px 36px;
+  padding: 36px 32px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.05);
   position: relative;
 }
@@ -132,7 +133,7 @@ body.auth-page {
 
 .auth-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .auth-badge {
@@ -146,20 +147,76 @@ body.auth-page {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .auth-title {
-  font-size: 1.8rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #FFF;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .auth-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--auth-text-muted);
-  line-height: 1.5;
+  line-height: 1.45;
+}
+
+/* Google OAuth Button */
+.auth-google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 13px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  color: #FFF;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-bottom: 20px;
+}
+
+.auth-google-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.auth-google-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #6B7280;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-divider span {
+  padding: 0 12px;
 }
 
 /* Error Alert Box */
@@ -170,7 +227,7 @@ body.auth-page {
   padding: 12px 16px;
   font-size: 0.85rem;
   color: #FCA5A5;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   display: none;
   align-items: center;
   gap: 10px;
@@ -189,15 +246,15 @@ body.auth-page {
 
 /* Form Controls */
 .auth-form-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .auth-label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 500;
   color: #D1D5DB;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
 .auth-input-wrapper {
@@ -211,7 +268,7 @@ body.auth-page {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 13px 16px;
   font-size: 0.95rem;
   font-family: inherit;
   color: #FFF;
@@ -246,15 +303,40 @@ body.auth-page {
   color: #FFF;
 }
 
+/* Remember Me Checkbox Row */
+.auth-remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.auth-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--auth-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-checkbox-label input[type="checkbox"] {
+  accent-color: var(--auth-gold);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 /* Submit Button */
 .auth-submit-btn {
   width: 100%;
-  padding: 15px;
+  padding: 14px;
   background: var(--auth-gold-gradient);
   border: none;
   border-radius: 12px;
   color: #0A0A0A;
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
@@ -264,7 +346,6 @@ body.auth-page {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 10px;
 }
 
 .auth-submit-btn:hover:not(:disabled) {
@@ -275,7 +356,6 @@ body.auth-page {
 .auth-submit-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  filter: grayscale(0.5);
 }
 
 /* Footer Link */
@@ -296,9 +376,58 @@ body.auth-page {
   text-decoration: underline;
 }
 
+/* Mandatory Mobile Binding Modal (Google First-Time Users) */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-modal-overlay.active {
+  display: flex;
+}
+
+.auth-modal-card {
+  width: 100%;
+  max-width: 440px;
+  background: #111014;
+  border: 1px solid var(--auth-gold);
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+  animation: authFadeUp 0.3s ease-out;
+}
+
+.auth-modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 6px;
+}
+
+.auth-modal-desc {
+  font-size: 0.82rem;
+  color: var(--auth-text-muted);
+  line-height: 1.4;
+}
+
 @media (max-width: 480px) {
   .auth-card {
-    padding: 30px 20px;
+    padding: 28px 18px;
     border-radius: 16px;
   }
   .auth-title {
