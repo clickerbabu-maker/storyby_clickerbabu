@@ -278,44 +278,6 @@ body.auth-page {
   filter: grayscale(0.5);
 }
 
-/* Quick Demo Login Pill for Clicker Babu */
-.auth-demo-box {
-  margin-top: 24px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed rgba(212, 175, 55, 0.3);
-  border-radius: 14px;
-  text-align: center;
-}
-
-.auth-demo-title {
-  font-size: 0.78rem;
-  color: var(--auth-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
-}
-
-.auth-demo-btn {
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid var(--auth-gold);
-  border-radius: 20px;
-  color: var(--auth-gold);
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
-}
-
-.auth-demo-btn:hover {
-  background: var(--auth-gold);
-  color: #000;
-}
-
 /* Footer Link */
 .auth-footer {
   margin-top: 24px;
