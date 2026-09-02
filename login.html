@@ -6,7 +6,7 @@
     <title>Merchant Portal Login | business-online.in</title>
     <meta name="description" content="Secure merchant authentication portal for business owners, photographers, and studios on business-online.in.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="auth.css?v=1.0">
+    <link rel="stylesheet" href="auth.css?v=1.1">
 </head>
 <body class="auth-page">
     <div class="auth-noise-overlay"></div>
@@ -24,7 +24,7 @@
             <header class="auth-header">
                 <div class="auth-badge">Merchant Cloud OS</div>
                 <h1 class="auth-title">Merchant Login</h1>
-                <p class="auth-subtitle">Access your studio control panel, portfolio manager, and incoming customer leads.</p>
+                <p class="auth-subtitle">Access your studio control panel, portfolio manager, and customer leads.</p>
             </header>
 
             <div id="authAlert" class="auth-alert" role="alert" aria-live="assertive">
@@ -57,22 +57,15 @@
                 </button>
             </form>
 
-            <div class="auth-demo-box">
-                <div class="auth-demo-title">Flagship Showcase Account</div>
-                <button type="button" id="demoClickerBabuBtn" class="auth-demo-btn">
-                    <span>👑 1-Click Demo Fill: Story by Clicker Babu</span>
-                </button>
-            </div>
-
             <footer class="auth-footer">
-                Don't have a business subdomain yet? <a href="index.html#subdomainClaimInput">Claim in 60s →</a>
+                Don't have a business subdomain yet? <a href="index.html#subdomainClaimInput">Claim your store in 60s →</a>
             </footer>
         </main>
     </div>
 
     <!-- Multi-Tenant Engine & Auth Controller -->
     <script src="tenants/tenant-registry.js?v=1.0"></script>
-    <script src="auth.js?v=1.0"></script>
+    <script src="auth.js?v=1.1"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('merchantLoginForm');
@@ -82,7 +75,6 @@
             const alertBox = document.getElementById('authAlert');
             const alertMsg = document.getElementById('authAlertMsg');
             const togglePwdBtn = document.getElementById('togglePwdBtn');
-            const demoBtn = document.getElementById('demoClickerBabuBtn');
 
             // 1. Password Visibility Toggle
             togglePwdBtn.addEventListener('click', () => {
@@ -91,15 +83,7 @@
                 togglePwdBtn.textContent = type === 'password' ? '👁️' : '🙈';
             });
 
-            // 2. 1-Click Demo Fill for Story by Clicker Babu
-            demoBtn.addEventListener('click', () => {
-                identifierInput.value = 'clickerbabu';
-                passwordInput.value = 'ClickerBabu@2026';
-                alertBox.classList.remove('visible');
-                passwordInput.focus();
-            });
-
-            // 3. Pre-fill username if in URL query (e.g. login.html?user=clickerbabu)
+            // 2. Pre-fill username if in URL query (e.g. login.html?user=clickerbabu)
             const urlParams = new URLSearchParams(window.location.search);
             const userParam = urlParams.get('user') || urlParams.get('tenant');
             if (userParam) {
@@ -133,7 +117,7 @@
                 }, 1000);
             }
 
-            // 4. Form Submit Handler
+            // 3. Form Submit Handler
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 alertBox.classList.remove('visible');
@@ -143,7 +127,7 @@
 
                 submitBtn.disabled = true;
                 const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = `⏳ Authenticating with Supabase Cloud...`;
+                submitBtn.innerHTML = `⏳ Authenticating with Cloud Database...`;
 
                 const result = await window.MerchantAuth.loginWithCredentials(identifier, password);
 
