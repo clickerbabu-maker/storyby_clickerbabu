@@ -1,9 +1,24 @@
 /**
  * business-online.in — SaaS Directory & Multi-Tenant Engine Logic
+ * Enhanced with Live Supabase Cloud Sync, Bilingual Smart Search & Instant Onboarding CRUD
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initMultiTenantRouter();
+});
+
+// Listen for background cloud database sync updates
+window.addEventListener('tenants-synced', (e) => {
+  console.log('⚡ Live Supabase cloud tenants updated:', e.detail.count);
+  const searchInput = document.getElementById('directorySearchInput');
+  const citySelect = document.getElementById('directoryCitySelect');
+  const activeChip = document.querySelector('.cat-chip.active');
+  
+  const query = (searchInput?.value || '').toLowerCase().trim();
+  const city = (citySelect?.value || 'all').toLowerCase();
+  const cat = activeChip?.getAttribute('data-cat') || 'all';
+
+  renderDirectoryListings(query, cat, city);
 });
 
 function initMultiTenantRouter() {
@@ -44,13 +59,16 @@ function initMultiTenantRouter() {
 }
 
 function initSaaSDirectoryFeatures() {
-  // 1. Subdomain Availability Live Checker
+  // 1. Subdomain Availability Live Checker (Debounced)
   const subdomainInput = document.getElementById('subdomainClaimInput');
   const claimBtn = document.getElementById('subdomainClaimBtn');
   const statusMsg = document.getElementById('subdomainStatusMsg');
 
+  let debounceTimer = null;
+
   if (subdomainInput && claimBtn) {
     const checkAvailability = () => {
+      clearTimeout(debounceTimer);
       const val = subdomainInput.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
       subdomainInput.value = val;
       
@@ -60,14 +78,24 @@ function initSaaSDirectoryFeatures() {
       }
 
       statusMsg.style.display = 'block';
-      const existing = window.BusinessOnlineEngine.TENANTS[val];
-      if (existing) {
-        statusMsg.style.color = '#EF4444';
-        statusMsg.innerHTML = `❌ <strong>${val}.business-online.in</strong> is already claimed by <em>${existing.businessName}</em>. <a href="?tenant=${val}" style="color:#60A5FA; text-decoration:underline;">View Website →</a>`;
-      } else {
-        statusMsg.style.color = '#10B981';
-        statusMsg.innerHTML = `✨ <strong>${val}.business-online.in</strong> is available! Ready to launch in 60s.`;
-      }
+      statusMsg.style.color = '#94A3B8';
+      statusMsg.innerHTML = `🔍 Checking availability for <strong>${val}.business-online.in</strong>...`;
+
+      debounceTimer = setTimeout(async () => {
+        const isAvail = await window.BusinessOnlineEngine.isUsernameAvailable(val);
+        const existing = window.BusinessOnlineEngine.TENANTS[val];
+
+        if (!isAvail && existing) {
+          statusMsg.style.color = '#EF4444';
+          statusMsg.innerHTML = `❌ <strong>${val}.business-online.in</strong> is already claimed by <em>${existing.businessName}</em>. <a href="?tenant=${val}" style="color:#60A5FA; text-decoration:underline;">View Website →</a>`;
+        } else if (isAvail) {
+          statusMsg.style.color = '#10B981';
+          statusMsg.innerHTML = `✨ <strong>${val}.business-online.in</strong> is 100% available! Ready to launch in 60s.`;
+        } else {
+          statusMsg.style.color = '#EF4444';
+          statusMsg.innerHTML = `❌ <strong>${val}.business-online.in</strong> is taken. Please choose another username.`;
+        }
+      }, 250);
     };
 
     subdomainInput.addEventListener('input', checkAvailability);
@@ -83,9 +111,9 @@ function initSaaSDirectoryFeatures() {
   }
 
   // 2. Render Business Directory Cards
-  renderDirectoryListingsings();
+  renderDirectoryListings();
 
-  // 3. Search & Filter Listeners
+  // 3. Search & Filter Listeners (with Bilingual Keyword Expansion)
   const searchInput = document.getElementById('directorySearchInput');
   const citySelect = document.getElementById('directoryCitySelect');
   const categoryChips = document.querySelectorAll('.cat-chip');
@@ -96,7 +124,7 @@ function initSaaSDirectoryFeatures() {
     const query = (searchInput?.value || '').toLowerCase().trim();
     const city = (citySelect?.value || 'all').toLowerCase();
     
-    renderDirectoryListingsings(query, currentCategory, city);
+    renderDirectoryListings(query, currentCategory, city);
   }
 
   if (searchInput) searchInput.addEventListener('input', applyFilters);
@@ -131,9 +159,15 @@ function initSaaSDirectoryFeatures() {
     });
   }
 
+  // 5. Live Onboarding Form Submission with Cloud DB Persistence
   if (onboardForm) {
-    onboardForm.addEventListener('submit', (e) => {
+    onboardForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const submitBtn = onboardForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `⏳ Provisioning Store on Supabase...`;
+
       const formData = {
         username: document.getElementById('newUsername').value,
         businessName: document.getElementById('newBusinessName').value,
@@ -144,11 +178,21 @@ function initSaaSDirectoryFeatures() {
         tagline: document.getElementById('newTagline').value || 'Proudly powered by business-online.in'
       };
 
-      const newTenant = window.BusinessOnlineEngine.registerNewTenant(formData);
-      if (newTenant) {
-        modalBackdrop.classList.remove('active');
-        alert(`🎉 Congratulations! Your website ${newTenant.username}.business-online.in has been generated!`);
-        window.location.search = `?tenant=${newTenant.username}`;
+      try {
+        const newTenant = await window.BusinessOnlineEngine.registerNewTenant(formData);
+        if (newTenant) {
+          modalBackdrop.classList.remove('active');
+          renderDirectoryListings();
+          alert(`🎉 Congratulations! Your official website https://${newTenant.username}.business-online.in has been generated and connected to Supabase PostgreSQL!`);
+          window.location.search = `?tenant=${newTenant.username}`;
+        } else {
+          alert('❌ Could not register subdomain. Please try a different username.');
+        }
+      } catch (err) {
+        alert('❌ Registration failed: ' + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
       }
     });
   }
@@ -165,21 +209,47 @@ function openOnboardingModal(prefillUsername = '') {
   }
 }
 
-function renderDirectoryListingsings(query = '', category = 'all', city = 'all') {
+// Smart Bilingual Query Expansion
+const BILINGUAL_SYNONYMS = {
+  'mithai': ['sweets', 'bakery', 'ladoo', 'katli', 'dessert'],
+  'sweets': ['mithai', 'bakery', 'confectionery', 'ladoo'],
+  'photo': ['photography', 'camera', 'wedding', 'cinematography', 'clicker'],
+  'camera': ['photography', 'photo', 'film', 'cinema'],
+  'shaadi': ['wedding', 'marriage', 'bridal', 'prewedding', 'photography'],
+  'wedding': ['shaadi', 'bridal', 'prewedding', 'ceremony'],
+  'daant': ['dental', 'teeth', 'dentist', 'clinic', 'implant'],
+  'dental': ['daant', 'dentist', 'teeth', 'clinic', 'oral'],
+  'doctor': ['clinic', 'healthcare', 'medical', 'dental', 'hospital']
+};
+
+function expandBilingualQuery(q) {
+  const words = q.split(/\s+/).filter(Boolean);
+  const expanded = new Set(words);
+  words.forEach(w => {
+    if (BILINGUAL_SYNONYMS[w]) {
+      BILINGUAL_SYNONYMS[w].forEach(syn => expanded.add(syn));
+    }
+  });
+  return Array.from(expanded);
+}
+
+function renderDirectoryListings(query = '', category = 'all', city = 'all') {
   const grid = document.getElementById('directoryGrid');
   if (!grid) return;
 
   const allTenants = window.BusinessOnlineEngine.getAllTenants();
+  const searchTerms = query ? expandBilingualQuery(query) : [];
   
   const filtered = allTenants.filter(t => {
-    const matchQuery = !query || 
-      t.businessName.toLowerCase().includes(query) || 
-      t.about.toLowerCase().includes(query) || 
-      t.category.toLowerCase().includes(query) || 
-      t.tagline.toLowerCase().includes(query);
+    const searchableText = `${t.businessName} ${t.about} ${t.category} ${t.tagline} ${t.username} ${t.location?.city || ''}`.toLowerCase();
+    
+    let matchQuery = true;
+    if (searchTerms.length > 0) {
+      matchQuery = searchTerms.some(term => searchableText.includes(term));
+    }
 
     const matchCat = (category === 'all') || t.category.toLowerCase().includes(category.toLowerCase());
-    const matchCity = (city === 'all') || (t.location.city && t.location.city.toLowerCase() === city);
+    const matchCity = (city === 'all') || (t.location.city && t.location.city.toLowerCase() === city.toLowerCase());
 
     return matchQuery && matchCat && matchCity;
   });
@@ -187,16 +257,25 @@ function renderDirectoryListingsings(query = '', category = 'all', city = 'all')
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; color: #9CA3AF;">
-        <h3>No verified businesses found matching your criteria.</h3>
-        <p style="margin-top: 8px;">Be the first to list your business in this category!</p>
-        <button class="saas-btn-primary js-open-onboarding" style="margin-top: 16px;">+ Register Your Business</button>
+        <h3 style="font-size: 1.3rem; margin-bottom: 8px;">No verified businesses found matching your search.</h3>
+        <p style="color: #6B7280;">Be the first business owner to claim your subdomain in this category!</p>
+        <button class="saas-btn-primary js-open-onboarding" style="margin-top: 16px;">+ Claim Your Free Subdomain</button>
       </div>
     `;
+
+    // Bind onboarding modal trigger on empty state button
+    const emptyBtn = grid.querySelector('.js-open-onboarding');
+    if (emptyBtn) {
+      emptyBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openOnboardingModal();
+      });
+    }
     return;
   }
 
   grid.innerHTML = filtered.map(t => `
-    <div class="business-card">
+    <div class="business-card" tabindex="0" role="article" aria-label="${t.businessName}">
       <div class="card-cover" style="background-image: url('${t.heroCover || (t.catalog && t.catalog[0]?.img) || 'assets/images/portfolio/hero_monochrome_symphony.webp'}')">
         <div class="card-subdomain-pill">⚡ ${t.username}.business-online.in</div>
         <div class="card-verified-badge">✓ Verified</div>
@@ -209,10 +288,10 @@ function renderDirectoryListingsings(query = '', category = 'all', city = 'all')
           <span class="rating-num">${t.rating || '5.0'}</span>
           <span class="reviews-cnt">(${t.reviewsCount || '1'} reviews) • 📍 ${t.location.city}</span>
         </div>
-        <p class="card-desc">${t.about.substring(0, 130)}...</p>
+        <p class="card-desc">${(t.about || '').substring(0, 130)}...</p>
         <div class="card-footer">
-          <a href="?tenant=${t.username}" class="card-btn-visit">Visit Website →</a>
-          <a href="https://wa.me/${t.contact.whatsapp}?text=Hi%20${encodeURIComponent(t.businessName)},%20I%20found%20you%20on%20business-online.in" target="_blank" rel="noopener" class="card-btn-wa" title="Instant WhatsApp">💬</a>
+          <a href="?tenant=${t.username}" class="card-btn-visit" aria-label="Visit ${t.businessName} website">Visit Website →</a>
+          <a href="https://wa.me/${t.contact.whatsapp}?text=Hi%20${encodeURIComponent(t.businessName)},%20I%20found%20you%20on%20business-online.in" target="_blank" rel="noopener" class="card-btn-wa" title="Instant WhatsApp" aria-label="WhatsApp ${t.businessName}">💬</a>
         </div>
       </div>
     </div>
