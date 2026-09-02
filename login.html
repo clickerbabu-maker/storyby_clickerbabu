@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Portal Login | business-online.in</title>
+    <meta name="description" content="Secure merchant authentication portal for business owners, photographers, and studios on business-online.in.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="auth.css?v=1.0">
+</head>
+<body class="auth-page">
+    <div class="auth-noise-overlay"></div>
+
+    <div class="auth-wrapper">
+        <nav class="auth-top-nav" aria-label="Portal Navigation">
+            <a href="index.html" class="auth-brand-link">
+                <span class="auth-brand-logo">⚡</span>
+                <span>business-online.in</span>
+            </a>
+            <a href="index.html" class="auth-back-link">← Back to Directory</a>
+        </nav>
+
+        <main class="auth-card" role="main">
+            <header class="auth-header">
+                <div class="auth-badge">Merchant Cloud OS</div>
+                <h1 class="auth-title">Merchant Login</h1>
+                <p class="auth-subtitle">Access your studio control panel, portfolio manager, and incoming customer leads.</p>
+            </header>
+
+            <div id="authAlert" class="auth-alert" role="alert" aria-live="assertive">
+                <span id="authAlertIcon">⚠️</span>
+                <span id="authAlertMsg">Invalid credentials.</span>
+            </div>
+
+            <form id="merchantLoginForm" autocomplete="on">
+                <div class="auth-form-group">
+                    <label for="identifierInput" class="auth-label">Business Username, Mobile, or Email</label>
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="identifierInput" class="auth-input" placeholder="e.g. clickerbabu or 7047470742" required autocomplete="username" spellcheck="false" autofocus>
+                    </div>
+                </div>
+
+                <div class="auth-form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label for="passwordInput" class="auth-label" style="margin-bottom:0;">Password</label>
+                        <a href="https://wa.me/917047470742?text=Hi%20Support,%20I%20forgot%20my%20merchant%20password%20for%20business-online.in" target="_blank" rel="noopener" style="font-size: 0.78rem; color: var(--auth-gold); text-decoration: none;">Forgot Password?</a>
+                    </div>
+                    <div class="auth-input-wrapper">
+                        <input type="password" id="passwordInput" class="auth-input" placeholder="Enter your account password" required autocomplete="current-password">
+                        <button type="button" id="togglePwdBtn" class="auth-toggle-pwd" aria-label="Toggle password visibility">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" id="loginSubmitBtn" class="auth-submit-btn">
+                    <span>Sign In to Merchant Dashboard</span>
+                    <span>→</span>
+                </button>
+            </form>
+
+            <div class="auth-demo-box">
+                <div class="auth-demo-title">Flagship Showcase Account</div>
+                <button type="button" id="demoClickerBabuBtn" class="auth-demo-btn">
+                    <span>👑 1-Click Demo Fill: Story by Clicker Babu</span>
+                </button>
+            </div>
+
+            <footer class="auth-footer">
+                Don't have a business subdomain yet? <a href="index.html#subdomainClaimInput">Claim in 60s →</a>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Multi-Tenant Engine & Auth Controller -->
+    <script src="tenants/tenant-registry.js?v=1.0"></script>
+    <script src="auth.js?v=1.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('merchantLoginForm');
+            const identifierInput = document.getElementById('identifierInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const alertBox = document.getElementById('authAlert');
+            const alertMsg = document.getElementById('authAlertMsg');
+            const togglePwdBtn = document.getElementById('togglePwdBtn');
+            const demoBtn = document.getElementById('demoClickerBabuBtn');
+
+            // 1. Password Visibility Toggle
+            togglePwdBtn.addEventListener('click', () => {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                togglePwdBtn.textContent = type === 'password' ? '👁️' : '🙈';
+            });
+
+            // 2. 1-Click Demo Fill for Story by Clicker Babu
+            demoBtn.addEventListener('click', () => {
+                identifierInput.value = 'clickerbabu';
+                passwordInput.value = 'ClickerBabu@2026';
+                alertBox.classList.remove('visible');
+                passwordInput.focus();
+            });
+
+            // 3. Pre-fill username if in URL query (e.g. login.html?user=clickerbabu)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userParam = urlParams.get('user') || urlParams.get('tenant');
+            if (userParam) {
+                identifierInput.value = userParam;
+                passwordInput.focus();
+            }
+
+            // Check if already locked out on load
+            const rateLimit = window.MerchantAuth.getRateLimitState();
+            if (rateLimit.isLocked) {
+                showLockoutTimer(rateLimit.remainingSecs);
+            }
+
+            function showError(msg) {
+                alertMsg.innerHTML = msg;
+                alertBox.classList.add('visible');
+            }
+
+            function showLockoutTimer(seconds) {
+                submitBtn.disabled = true;
+                let left = seconds;
+                const timer = setInterval(() => {
+                    left--;
+                    submitBtn.innerHTML = `🔒 Locked (${left}s remaining)`;
+                    if (left <= 0) {
+                        clearInterval(timer);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = `<span>Sign In to Merchant Dashboard</span> <span>→</span>`;
+                        alertBox.classList.remove('visible');
+                    }
+                }, 1000);
+            }
+
+            // 4. Form Submit Handler
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                alertBox.classList.remove('visible');
+
+                const identifier = identifierInput.value.trim();
+                const password = passwordInput.value;
+
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = `⏳ Authenticating with Supabase Cloud...`;
+
+                const result = await window.MerchantAuth.loginWithCredentials(identifier, password);
+
+                if (result.success) {
+                    submitBtn.innerHTML = `✔ Login Successful! Redirecting...`;
+                    submitBtn.style.background = '#10B981';
+                    
+                    const redirectUrl = urlParams.get('redirect') || 'dashboard.html';
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 600);
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+
+                    if (result.isLocked) {
+                        showLockoutTimer(result.remainingSecs);
+                        showError(result.error);
+                    } else if (result.notFound) {
+                        showError(`${result.error} <a href="index.html#subdomainClaimInput" style="color:#D4AF37; text-decoration:underline;">Claim this store now →</a>`);
+                    } else {
+                        showError(result.error);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
