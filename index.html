@@ -139,8 +139,216 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&amp;family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css?v=10x_sec_v9">
+    <link rel="stylesheet" href="saas-directory.css?v=1.0">
 </head>
 <body>
+
+    <!-- ==========================================================
+         BUSINESS-ONLINE.IN — MAIN SAAS PLATFORM & DIRECTORY ENGINE
+         ========================================================== -->
+    <div id="saasPlatformContainer">
+        <!-- Top Navbar -->
+        <header class="saas-nav">
+            <a href="?" class="saas-brand">
+                <div class="saas-brand-icon">⚡</div>
+                <span>business-online.in</span>
+                <span class="saas-badge-live">Live Platform</span>
+            </a>
+            <div class="saas-nav-actions">
+                <a href="#directory" class="saas-btn-outline">Explore Directory</a>
+                <button class="saas-btn-primary js-open-onboarding">
+                    <span>+ Claim Subdomain</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="saas-hero">
+            <div class="saas-hero-pill">
+                <span>🚀 India's Multi-Tenant Business Cloud</span> • 60-Second Instant Deployment
+            </div>
+            <h1 class="saas-hero-title">
+                Apne Business Ko Online Le Aayein <br>
+                <span class="saas-gradient-text">60 Seconds Mein</span>
+            </h1>
+            <p class="saas-hero-subtitle">
+                Claim your custom white-labeled subdomain <strong>(yourname.business-online.in)</strong>, get a high-converting portfolio, automated Google SEO rank, and direct WhatsApp customer leads with zero coding.
+            </p>
+
+            <!-- Subdomain Claimer Engine -->
+            <div class="subdomain-claimer-box">
+                <div class="subdomain-input-wrap">
+                    <input type="text" id="subdomainClaimInput" class="subdomain-input" placeholder="enter-your-business-name" autocomplete="off" spellcheck="false">
+                    <span class="subdomain-suffix">.business-online.in</span>
+                </div>
+                <button id="subdomainClaimBtn" class="subdomain-claim-btn">
+                    Claim Free Website →
+                </button>
+                <div id="subdomainStatusMsg" class="subdomain-status-msg"></div>
+            </div>
+        </section>
+
+        <!-- Hyper-Local Justdial Directory Section -->
+        <section class="tenant-switcher-section" id="directory">
+            <div class="section-header-row">
+                <div class="section-title-wrap">
+                    <h2>Verified Business Directory</h2>
+                    <p>Discover top-rated local photographers, restaurants, clinics, and professionals powered by business-online.in</p>
+                </div>
+                <button class="saas-btn-outline js-open-onboarding">+ List Your Business</button>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="directory-search-bar">
+                <div class="search-field" style="flex: 3;">
+                    <span>🔍</span>
+                    <input type="text" id="directorySearchInput" placeholder="Search by business name, service (e.g. Photography, Sweets, Dental)..." aria-label="Search directory by business name or service">
+                </div>
+                <div class="search-field" style="flex: 1.2;">
+                    <span>📍</span>
+                    <select id="directoryCitySelect" aria-label="Filter directory by city" title="Filter by city">
+                        <option value="all">All Locations</option>
+                        <option value="raipur">Raipur</option>
+                        <option value="bilaspur">Bilaspur</option>
+                        <option value="bhilai">Durg-Bhilai</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Category Chips -->
+            <div class="category-chips-row">
+                <button class="cat-chip active" data-cat="all">🌟 All Categories</button>
+                <button class="cat-chip" data-cat="photography">📷 Luxury Photography & Films</button>
+                <button class="cat-chip" data-cat="restaurant">🍬 Sweets, Bakery & Food</button>
+                <button class="cat-chip" data-cat="healthcare">🩺 Healthcare & Clinics</button>
+                <button class="cat-chip" data-cat="salon">💇 Salons & Beauty</button>
+                <button class="cat-chip" data-cat="retail">🛍️ Retail & Stores</button>
+            </div>
+
+            <!-- Dynamic Directory Grid -->
+            <div class="directory-grid" id="directoryGrid">
+                <!-- Injected dynamically by saas-directory.js -->
+            </div>
+        </section>
+
+        <!-- Feature Pillars -->
+        <section class="saas-features-section">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                <h2 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px;">
+                    Built For Millions of Growing Businesses
+                </h2>
+                <p style="color: var(--saas-text-muted);">
+                    Everything you need to showcase, attract high-paying clients, and close deals effortlessly.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="feature-icon-wrap">⚡</div>
+                    <h3>Instant White-Label Subdomain</h3>
+                    <p>Get <code>yourbrand.business-online.in</code> ready in seconds with free SSL, edge hosting, and zero server maintenance.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-wrap">💬</div>
+                    <h3>Direct WhatsApp Lead Machine</h3>
+                    <p>No middlemen or commissions. Clients click to connect directly with your WhatsApp with pre-filled inquiry details.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-wrap">📈</div>
+                    <h3>Google Search Rank Domination</h3>
+                    <p>Built-in Local SEO, automated Schema.org rich snippets, and Google Maps integration to get ranked #1 in your city.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-wrap">📱</div>
+                    <h3>Ultra-Fast Mobile PWA</h3>
+                    <p>100/100 Google PageSpeed rating. Loads in under 0.5s on any mobile connection with offline progressive web app support.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-wrap">🎨</div>
+                    <h3>Industry-Tailored Luxury Themes</h3>
+                    <p>Curated design presets for Luxury Photography, Gourmet Bakeries, Dental Clinics, Boutiques, and Real Estate.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-wrap">🌐</div>
+                    <h3>Custom Domain Ready</h3>
+                    <p>Connect your own <code>www.yourbrand.com</code> anytime while using our lightning-fast backend engine.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="padding: 40px 5%; text-align: center; border-top: 1px solid var(--saas-border); color: var(--saas-text-muted); font-size: 0.88rem;">
+            <p>© 2026 business-online.in — Enterprise Multi-Tenant Platform & Business Cloud. All rights reserved.</p>
+            <div style="margin-top: 12px; display: flex; justify-content: center; gap: 20px;">
+                <a href="privacy.html" style="color: inherit; text-decoration: none;">Privacy Policy</a>
+                <a href="terms.html" style="color: inherit; text-decoration: none;">Terms of Service</a>
+                <a href="?tenant=clickerbabu" style="color: var(--saas-primary); text-decoration: none;">Clicker Babu Flagship</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Dynamic Generic Storefront Container -->
+    <div id="genericTenantContainer" style="display: none;"></div>
+
+    <!-- Onboarding Vendor Modal -->
+    <div class="saas-modal-backdrop" id="onboardModalBackdrop">
+        <div class="saas-modal-content">
+            <button class="saas-modal-close" id="closeOnboardModal" aria-label="Close modal">&times;</button>
+            <h3 class="modal-title">🚀 Launch Your Business Online</h3>
+            <p class="modal-desc">Fill in details to get your free <code>yourbrand.business-online.in</code> website instantly!</p>
+
+            <form id="onboardVendorForm">
+                <div class="saas-form-group">
+                    <label for="newUsername">Claim Your Subdomain</label>
+                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.4); border: 1px solid var(--saas-border); border-radius: 10px; padding: 0 12px;">
+                        <input type="text" id="newUsername" required placeholder="e.g. royalstudio" style="flex:1; background:transparent; border:none; color:#fff; padding: 12px 0; outline:none; text-transform:lowercase;">
+                        <span style="color: var(--saas-primary); font-weight:600; font-size: 0.85rem;">.business-online.in</span>
+                    </div>
+                </div>
+
+                <div class="saas-form-group">
+                    <label for="newBusinessName">Business Name</label>
+                    <input type="text" id="newBusinessName" class="saas-form-input" required placeholder="e.g. Royal Studio & Films">
+                </div>
+
+                <div class="saas-form-group">
+                    <label for="newCategory">Business Category</label>
+                    <select id="newCategory" class="saas-form-select" required>
+                        <option value="Photography & Cinema">Photography & Films</option>
+                        <option value="Sweets & Restaurant">Restaurant, Cafe & Sweets</option>
+                        <option value="Healthcare & Clinic">Healthcare & Clinic</option>
+                        <option value="Salon & Beauty">Salon, Spa & Beauty</option>
+                        <option value="Retail & Store">Retail & Shopping</option>
+                        <option value="Professional Services">Professional Services</option>
+                    </select>
+                </div>
+
+                <div class="saas-form-group">
+                    <label for="newCity">City / Location</label>
+                    <input type="text" id="newCity" class="saas-form-input" required placeholder="e.g. Raipur, Chhattisgarh">
+                </div>
+
+                <div class="saas-form-group">
+                    <label for="newPhone">WhatsApp Number (for customer leads)</label>
+                    <input type="tel" id="newPhone" class="saas-form-input" required placeholder="e.g. 919876543210">
+                </div>
+
+                <div class="saas-form-group">
+                    <label for="newTagline">Tagline / One-line Description</label>
+                    <input type="text" id="newTagline" class="saas-form-input" placeholder="e.g. Premium Candid Photography in Raipur">
+                </div>
+
+                <button type="submit" class="saas-btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem; margin-top: 10px;">
+                    Generate My Website Now 🚀
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         CUSTOM TENANT CONTAINER (CLICKER BABU BESPOKE SHOWCASE)
+         ========================================================== -->
+    <div id="customTenantContainer" style="display: none;">
 
     <!-- Hairline Scroll Reading Progress Bar -->
     <div class="scroll-progress-bar" id="scrollProgress"></div>
@@ -903,9 +1111,12 @@
             </div>
         </div>
     </div>
+    </div><!-- End #customTenantContainer -->
 
     <!-- Silk Smooth Momentum Scroll Engine (Self-Hosted Local Asset) -->
     <script src="assets/js/lenis.min.js"></script>
     <script src="script.js?v=10x_security_v8"></script>
+    <script src="tenants/tenant-registry.js?v=1.0"></script>
+    <script src="saas-directory.js?v=1.0"></script>
 </body>
 </html>
