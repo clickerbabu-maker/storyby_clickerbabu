@@ -1,0 +1,85 @@
+{
+  "tenantId": "t_cb_001",
+  "username": "clickerbabu",
+  "customDomain": null,
+  "businessName": "Story by Clicker Babu",
+  "tagline": "Luxury Wedding Photography & Couture Films",
+  "about": "Award-winning luxury wedding photography and couture cinematography based in Raipur, Chhattisgarh. Preserving royal destination weddings, raw emotions, and timeless grace across India and worldwide.",
+  "category": "photography",
+  "location": {
+    "city": "Raipur",
+    "state": "Chhattisgarh",
+    "address": "Civil Lines, Raipur",
+    "pincode": "492001",
+    "geo": {
+      "lat": 21.2514,
+      "lng": 81.6296
+    }
+  },
+  "contact": {
+    "phone": "+917047470742",
+    "whatsapp": "917047470742",
+    "email": "hello@business-online.in",
+    "instagram": "storyby_clickerbabu",
+    "youtube": "storybyclickerbabu"
+  },
+  "theme": {
+    "preset": "luxury_dark_gold",
+    "primaryColor": "#B89758",
+    "accentColor": "#D4AF37",
+    "fontHeading": "Cormorant Garamond",
+    "fontBody": "Plus Jakarta Sans",
+    "heroStyle": "cinematic_slider"
+  },
+  "branding": {
+    "logoUrl": "favicon.svg",
+    "faviconUrl": "favicon.svg",
+    "heroCoverUrl": "assets/images/portfolio/hero_monochrome_symphony.webp",
+    "badges": ["Featured in WedMeGood", "Top 1% Luxury Visual Artists", "Over 250+ Royal Weddings"]
+  },
+  "catalog": [
+    {
+      "id": "srv_01",
+      "title": "Royal Destination Wedding Cinema",
+      "description": "Full-scale couture film crew with RED & Sony FX cinema cameras, master colorist grading, and aerial drone coverage.",
+      "price": "Bespoke Quote",
+      "imageUrl": "assets/images/portfolio/hero_monochrome_symphony.webp",
+      "featured": true
+    },
+    {
+      "id": "srv_02",
+      "title": "Fine Art Candid Photojournalism",
+      "description": "Unobtrusive documentation of candid laughter, stolen glances, and grand royal rituals.",
+      "price": "Bespoke Quote",
+      "imageUrl": "assets/images/portfolio/royal_pheras_fire.webp",
+      "featured": true
+    },
+    {
+      "id": "srv_03",
+      "title": "Pre-Wedding Cinematic Love Stories",
+      "description": "Stylized editorial couple portraiture in exotic palace or heritage destinations across India.",
+      "price": "Bespoke Quote",
+      "imageUrl": "assets/images/portfolio/udaipur_palace_twilight.webp",
+      "featured": true
+    }
+  ],
+  "testimonials": [
+    {
+      "clientName": "Aditi & Harshwardhan Singhania",
+      "location": "Jagmandir Island Palace, Udaipur",
+      "review": "Clicker Babu and their team did not just capture our wedding; they immortalized our emotions into high-fashion cinema. Absolute masters of luxury aesthetics!",
+      "rating": 5
+    },
+    {
+      "clientName": "Meera & Siddharth Lodha",
+      "location": "Fairmont Jaipur",
+      "review": "The visual grandeur and discreet candid work was unparalleled. Our wedding album looks like Vogue Wedding Couture.",
+      "rating": 5
+    }
+  ],
+  "seo": {
+    "metaTitle": "Clicker Babu | Story by Clicker Babu • Luxury Wedding Photography & Films",
+    "metaDescription": "Story by Clicker Babu — Award-winning luxury wedding photography and couture cinematography based in Raipur, Chhattisgarh. Official white-label portfolio on business-online.in.",
+    "keywords": ["Clicker Babu", "Story by Clicker Babu", "Luxury Wedding Photography Raipur", "business-online.in"]
+  }
+}
