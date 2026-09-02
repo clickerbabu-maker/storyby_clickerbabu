@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BusinessOnlineTenantProfile",
+  "description": "Standardized schema for all white-labeled tenants on business-online.in",
+  "type": "object",
+  "required": ["tenantId", "username", "businessName", "category", "contact", "theme"],
+  "properties": {
+    "tenantId": { "type": "string" },
+    "username": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "customDomain": { "type": ["string", "null"] },
+    "businessName": { "type": "string" },
+    "tagline": { "type": "string" },
+    "about": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["photography", "restaurant", "healthcare", "salon", "retail", "services", "realestate", "education"]
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "address": { "type": "string" },
+        "pincode": { "type": "string" },
+        "geo": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        }
+      },
+      "required": ["city", "address"]
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" },
+        "instagram": { "type": "string" },
+        "youtube": { "type": "string" }
+      },
+      "required": ["whatsapp", "phone"]
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "preset": { "type": "string", "enum": ["luxury_dark_gold", "clean_modern_light", "vibrant_emerald", "royal_sapphire", "warm_terracotta"] },
+        "primaryColor": { "type": "string" },
+        "accentColor": { "type": "string" },
+        "fontHeading": { "type": "string" },
+        "fontBody": { "type": "string" },
+        "heroStyle": { "type": "string", "enum": ["cinematic_slider", "split_editorial", "minimal_headline", "card_grid"] }
+      },
+      "required": ["preset", "primaryColor"]
+    },
+    "branding": {
+      "type": "object",
+      "properties": {
+        "logoUrl": { "type": "string" },
+        "faviconUrl": { "type": "string" },
+        "heroCoverUrl": { "type": "string" },
+        "badges": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "catalog": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "string" },
+          "imageUrl": { "type": "string" },
+          "featured": { "type": "boolean" }
+        },
+        "required": ["id", "title"]
+      }
+    },
+    "testimonials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "clientName": { "type": "string" },
+          "location": { "type": "string" },
+          "review": { "type": "string" },
+          "rating": { "type": "number", "minimum": 1, "maximum": 5 }
+        },
+        "required": ["clientName", "review", "rating"]
+      }
+    },
+    "seo": {
+      "type": "object",
+      "properties": {
+        "metaTitle": { "type": "string" },
+        "metaDescription": { "type": "string" },
+        "keywords": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
