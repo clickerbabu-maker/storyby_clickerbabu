@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap');
+      .story-by { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-size: 42px; font-weight: 500; letter-spacing: 12px; text-anchor: middle; fill: #1C1C1E; }
+      .clicker-babu { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-size: 68px; font-weight: 600; letter-spacing: 16px; text-anchor: middle; fill: #1C1C1E; }
+      .tagline { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 11px; text-anchor: middle; fill: #8F7238; }
+      .divider-line { stroke: #B89758; stroke-width: 1.5; stroke-opacity: 0.6; }
+      .divider-diamond { fill: #B89758; }
+    </style>
+  </defs>
+  
+  <text x="400" y="90" class="story-by">STORY BY</text>
+  <text x="400" y="175" class="clicker-babu">CLICKER BABU</text>
+  
+  <line x1="200" y1="225" x2="375" y2="225" class="divider-line"/>
+  <polygon points="400,217 408,225 400,233 392,225" class="divider-diamond"/>
+  <line x1="425" y1="225" x2="600" y2="225" class="divider-line"/>
+  
+  <text x="400" y="278" class="tagline">WEDDINGS &amp; FILMS</text>
+</svg>
