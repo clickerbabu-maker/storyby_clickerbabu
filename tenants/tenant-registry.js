@@ -1,13 +1,19 @@
 /**
  * BusinessOnline Multi-Tenant Engine & Registry
- * Handles zero-latency tenant resolution, dynamic theme injection,
- * and white-label storefront rendering.
+ * Handles zero-latency tenant resolution, live Supabase database sync,
+ * dynamic theme injection, and white-label storefront rendering.
  */
 
 window.BusinessOnlineEngine = (function() {
-  const TENANTS = {
+  const SUPABASE_CONFIG = {
+    url: 'https://defrfqtyrqywwpwancza.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlZnJmcXR5cnF5d3dwd2FuY3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMzE4MjksImV4cCI6MjEwMzkwNzgyOX0.MP2B8J8HcZU0cGSf4ZhQhIGH5IK4klPpsqzWhZbhPGw'
+  };
+
+  // Seed / Local Cache Data (Fallback for sub-5ms instant rendering & offline resilience)
+  const LOCAL_CACHE = {
     "clickerbabu": {
-      "tenantId": "t_cb_001",
+      "tenantId": "11111111-1111-1111-1111-111111111111",
       "username": "clickerbabu",
       "businessName": "Story by Clicker Babu",
       "tagline": "Luxury Wedding Photography & Couture Films",
@@ -20,10 +26,10 @@ window.BusinessOnlineEngine = (function() {
       "reviewsCount": 84,
       "badges": ["Top 1% Luxury Visual Artists", "250+ Royal Weddings", "Featured on WedMeGood"],
       "verified": true,
-      "isCustomLayout": true // Clicker Babu uses bespoke luxury index layout
+      "isCustomLayout": true
     },
     "sharmasweets": {
-      "tenantId": "t_ss_002",
+      "tenantId": "22222222-2222-2222-2222-222222222222",
       "username": "sharmasweets",
       "businessName": "Sharma Sweets & Bakery",
       "tagline": "Pure Desi Ghee Confectionery & Festive Hampers",
@@ -44,7 +50,7 @@ window.BusinessOnlineEngine = (function() {
       ]
     },
     "royaldental": {
-      "tenantId": "t_rd_003",
+      "tenantId": "33333333-3333-3333-3333-333333333333",
       "username": "royaldental",
       "businessName": "Dr. Verma's Royal Dental & Implant Clinic",
       "tagline": "Advanced Painless Dentistry & Smile Design",
@@ -65,6 +71,71 @@ window.BusinessOnlineEngine = (function() {
       ]
     }
   };
+
+  // Load from localStorage if present
+  try {
+    const saved = localStorage.getItem('bo_tenants_cache');
+    if (saved) {
+      Object.assign(LOCAL_CACHE, JSON.parse(saved));
+    }
+  } catch (e) {
+    // Ignore storage errors
+  }
+
+  const TENANTS = LOCAL_CACHE;
+
+  // Initialize background live sync with Supabase
+  async function syncFromCloud() {
+    try {
+      const endpoint = `${SUPABASE_CONFIG.url}/rest/v1/tenants?select=*,tenant_profiles(*)&status=eq.active`;
+      const res = await fetch(endpoint, {
+        headers: {
+          'apikey': SUPABASE_CONFIG.anonKey,
+          'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+        }
+      });
+      if (!res.ok) return false;
+      const rows = await res.json();
+      if (Array.isArray(rows) && rows.length > 0) {
+        rows.forEach(r => {
+          const u = (r.username || '').toLowerCase();
+          if (!u) return;
+          const p = r.tenant_profiles || {};
+          TENANTS[u] = {
+            tenantId: r.id,
+            username: u,
+            businessName: r.business_name || u,
+            tagline: p.tagline || 'Proudly powered by business-online.in',
+            about: p.about_bio || 'Welcome to our official business portal.',
+            category: r.category || 'Local Business',
+            location: { city: p.city || 'Raipur', state: p.state || 'Chhattisgarh', address: p.address || '' },
+            contact: { phone: p.phone || '', whatsapp: p.whatsapp || p.phone || '', email: p.email || '', instagram: p.instagram || '' },
+            theme: p.theme_config && Object.keys(p.theme_config).length ? p.theme_config : (TENANTS[u]?.theme || { preset: 'luxury_dark_gold', primaryColor: '#B89758', accentColor: '#D4AF37', bg: '#141210', textColor: '#E6DCCA' }),
+            rating: p.rating ? parseFloat(p.rating) : (TENANTS[u]?.rating || 5.0),
+            reviewsCount: p.reviews_count || (TENANTS[u]?.reviewsCount || 1),
+            badges: p.badges || ['Verified Business'],
+            verified: r.is_verified ?? true,
+            heroCover: p.hero_cover_url || (TENANTS[u]?.heroCover || 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&auto=format&fit=crop&q=80'),
+            catalog: TENANTS[u]?.catalog || [
+              { id: '1', title: 'Featured Service / Product', price: 'Best Price', desc: 'Contact us directly on WhatsApp for instant quote.', img: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&auto=format&fit=crop&q=80' }
+            ],
+            isCustomLayout: u === 'clickerbabu'
+          };
+        });
+
+        try {
+          localStorage.setItem('bo_tenants_cache', JSON.stringify(TENANTS));
+        } catch (e) {}
+
+        // Trigger UI update event if directory is active
+        window.dispatchEvent(new CustomEvent('tenants-synced', { detail: { count: rows.length } }));
+        return true;
+      }
+    } catch (err) {
+      console.warn('Cloud database sync fallback active:', err.message);
+    }
+    return false;
+  }
 
   // Detect Active Tenant based on Subdomain or Query Param
   function resolveTenant() {
@@ -99,35 +170,131 @@ window.BusinessOnlineEngine = (function() {
     return Object.values(TENANTS);
   }
 
-  function registerNewTenant(tenantData) {
-    if (!tenantData.username) return false;
+  async function isUsernameAvailable(username) {
+    if (!username) return false;
+    const cleanUser = username.toLowerCase().replace(/[^a-z0-9-]/g, '');
+    if (TENANTS[cleanUser]) return false;
+
+    // Double check on Supabase Live
+    try {
+      const endpoint = `${SUPABASE_CONFIG.url}/rest/v1/tenants?username=eq.${encodeURIComponent(cleanUser)}&select=id`;
+      const res = await fetch(endpoint, {
+        headers: {
+          'apikey': SUPABASE_CONFIG.anonKey,
+          'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return Array.isArray(data) && data.length === 0;
+      }
+    } catch (e) {}
+
+    return !TENANTS[cleanUser];
+  }
+
+  async function registerNewTenant(tenantData) {
+    if (!tenantData.username) return null;
     const cleanUser = tenantData.username.toLowerCase().replace(/[^a-z0-9-]/g, '');
-    TENANTS[cleanUser] = {
+
+    const newObj = {
       tenantId: 't_' + Date.now(),
       username: cleanUser,
       businessName: tenantData.businessName || cleanUser,
       tagline: tenantData.tagline || 'Proudly powered by business-online.in',
-      about: tenantData.about || 'Welcome to our official business portal.',
+      about: tenantData.about || `Welcome to ${tenantData.businessName || cleanUser}. We provide quality services and premium products in ${tenantData.city || 'Raipur'}.`,
       category: tenantData.category || 'Local Business',
-      location: { city: tenantData.city || 'India', state: '', address: tenantData.address || '' },
+      location: { city: tenantData.city || 'Raipur', state: 'Chhattisgarh', address: tenantData.address || '' },
       contact: { phone: tenantData.phone || '', whatsapp: tenantData.whatsapp || tenantData.phone || '', email: tenantData.email || '' },
       theme: { preset: 'luxury_dark_gold', primaryColor: '#B89758', accentColor: '#D4AF37', bg: '#141210', textColor: '#E6DCCA' },
       rating: 5.0,
       reviewsCount: 1,
-      badges: ['Newly Verified', 'Online Verified Store'],
+      badges: ['Newly Verified Store', 'Instant WhatsApp Support'],
       verified: true,
       heroCover: tenantData.heroCover || 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&auto=format&fit=crop&q=80',
       catalog: [
-        { id: '1', title: 'Featured Service / Product', price: 'Best Price', desc: 'Contact us directly on WhatsApp for instant quote.', img: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&auto=format&fit=crop&q=80' }
+        { id: '1', title: 'Featured Service / Product', price: 'Best Price', desc: 'Contact us directly on WhatsApp for an instant custom quote.', img: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&auto=format&fit=crop&q=80' }
       ]
     };
-    return TENANTS[cleanUser];
+
+    // 1. Immediately store in local memory and storage for zero latency
+    TENANTS[cleanUser] = newObj;
+    try {
+      localStorage.setItem('bo_tenants_cache', JSON.stringify(TENANTS));
+    } catch (e) {}
+
+    // 2. Persist to Supabase Live Cloud Database
+    try {
+      const tenantPayload = {
+        username: cleanUser,
+        business_name: newObj.businessName,
+        category: newObj.category,
+        plan_tier: 'starter',
+        status: 'active',
+        is_verified: true
+      };
+
+      const tRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/tenants`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_CONFIG.anonKey,
+          'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(tenantPayload)
+      });
+
+      if (tRes.ok) {
+        const insertedTenants = await tRes.json();
+        const createdTenant = insertedTenants[0];
+        if (createdTenant && createdTenant.id) {
+          newObj.tenantId = createdTenant.id;
+
+          const profilePayload = {
+            tenant_id: createdTenant.id,
+            tagline: newObj.tagline,
+            about_bio: newObj.about,
+            city: newObj.location.city,
+            state: newObj.location.state,
+            address: newObj.location.address,
+            phone: newObj.contact.phone,
+            whatsapp: newObj.contact.whatsapp,
+            email: newObj.contact.email,
+            rating: 5.0,
+            reviews_count: 1
+          };
+
+          await fetch(`${SUPABASE_CONFIG.url}/rest/v1/tenant_profiles`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_CONFIG.anonKey,
+              'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(profilePayload)
+          });
+        }
+      }
+    } catch (err) {
+      console.warn('Background Supabase persistence note:', err.message);
+    }
+
+    return newObj;
+  }
+
+  // Trigger sync on load
+  if (typeof window !== 'undefined') {
+    setTimeout(syncFromCloud, 100);
   }
 
   return {
     resolveTenant,
     getAllTenants,
     registerNewTenant,
-    TENANTS
+    isUsernameAvailable,
+    syncFromCloud,
+    TENANTS,
+    SUPABASE_CONFIG
   };
 })();
